@@ -24,7 +24,7 @@ bool VirtualController::cycle(){
     Gamepad::axis rt = gamePad->getAxis("RT");
     Gamepad::axis lt = gamePad->getAxis("LT");
 
-    servoValue = (int) (ls.x*4000);
+    servoValue = (int) (ls.x*7000);
     logger.warn("cycle") << "ServoValue: " << servoValue;
     SensorData data;
 
