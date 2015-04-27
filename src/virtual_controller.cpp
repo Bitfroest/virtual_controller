@@ -16,7 +16,7 @@ bool VirtualController::cycle(){
     using sense_link::SensorData;
 
     static int time = 0;
-    static int16_t servoValue = 90;
+    static int16_t servoValue = 0;
 
     time ++;
 
@@ -24,11 +24,11 @@ bool VirtualController::cycle(){
     Gamepad::axis rt = gamePad->getAxis("RT");
     Gamepad::axis lt = gamePad->getAxis("LT");
 
-    servoValue = (int) (ls.x*3000);
+    servoValue = (int) (ls.x*4000);
     logger.warn("cycle") << "ServoValue: " << servoValue;
     SensorData data;
 
-    data.MotorVelocity.acceleration = ((rt.x-lt.x)*10000);
+    data.MotorVelocity.acceleration = ((rt.x-lt.x)*5000); // 10000/2
     senseBoard->setSensor(sense_link::MOTOR_VELOCITY,1,data);
 
     data.Servo.angle = servoValue;
