@@ -11,4 +11,7 @@ public:
 private:
     sense_link::SenseBoard *senseBoard;
     const Gamepad *gamePad;
+    int maxFrontServoRange;
+    int maxMotorRange;
+    const lms::type::ModuleConfig* config;
 };
