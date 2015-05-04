@@ -10,4 +10,4 @@ set (HEADERS
 include_directories("include")
 
 add_library ( virtual_controller MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(virtual_controller PRIVATE lms sense_link)
+target_link_libraries(virtual_controller PRIVATE lms sense_link gamepad_lib)
