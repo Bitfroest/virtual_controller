@@ -1,6 +1,7 @@
 #include "virtual_controller.h"
 #include "lms/datamanager.h"
 #include "gamepad/gamepad.h"
+#include <lms/extra/time.h>
 
 #include <cmath>
 
@@ -22,15 +23,26 @@ bool VirtualController::cycle(){
     static int16_t servoValue = 0;
     static int16_t motorValue = 0;
 
+
     // get axis from gamePad LS -> LeftStick value (LS.x,LS.y)
     Gamepad::axis ls = gamePad->getAxis("LS");
     Gamepad::axis rt = gamePad->getAxis("RT");
     Gamepad::axis lt = gamePad->getAxis("LT");
 
-    // generates values between -10000 and 10000
-    servoValue = (int) (ls.x*maxMotorRange);
-    motorValue = ((rt.x-lt.x)*maxMotorRange/2); // 10000/2 => (rt.x-lt.x = 2)
+    //Failsafe
 
+    if(lms::extra::PrecisionTime::now() - gamePad->timestamp()
+            < lms::extra::PrecisionTime::fromMillis(
+                config->get<int>("failSafeAfterMillis", 1000))){
+
+        // generates values between -10000 and 10000
+        servoValue = (int) (ls.x*maxFrontServoRange);
+        motorValue = ((rt.x-lt.x)*maxMotorRange/2); // 10000/2 => (rt.x-lt.x = 2)
+
+    }else{
+        servoValue = 0;
+        motorValue = 0;
+    }
 
     logger.warn("cycle") << "ServoValue: " << servoValue;
     SensorData data;
